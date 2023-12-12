@@ -1,12 +1,25 @@
 from signPdf.models import Client, Document
 from rest_framework import serializers
 from cryptography.fernet import Fernet
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class ClientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Client
         fields = ('client_id','username', 'email', 'password')
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        
+        client = Client(**validated_data)
+
+        if password:
+            client.set_password(password)
+
+        client.save()
+        
+        return client
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,4 +66,16 @@ class DocumentSerializer(serializers.ModelSerializer):
         representation['document_signature'] = signature
 
         return representation
+    
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        print(user)
+
+        token["client_id"] = user.client.pk
+        token["nome"] = user.client.username
+        token["cpf"] = user.client.email
+
+        return token
 
