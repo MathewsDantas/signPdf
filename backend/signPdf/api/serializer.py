@@ -2,6 +2,7 @@ from signPdf.models import Client, Document
 from rest_framework import serializers
 from cryptography.fernet import Fernet
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+import hashlib
 
 class ClientSerializer(serializers.ModelSerializer):
 
@@ -24,7 +25,7 @@ class ClientSerializer(serializers.ModelSerializer):
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ('document_id', 'client', 'document_title', 'document_body', 'document_signature')
+        fields = ('document_id', 'client', 'document_title', 'document_body', 'document_signature', 'document_hash')
     
     key = 'hOujKhh4XzJayE2TU4sRXsp1tHhblWsCpC4o0V14U38='
 
@@ -41,6 +42,13 @@ class DocumentSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         # Criar uma cópia mutável dos dados
         mutable_data = data.copy()
+
+        # Calcula o hash antes da criptografia
+        data_to_hash = f"{mutable_data.get('document_title', '')}{mutable_data.get('document_body', '')}"
+        hash_value = hashlib.sha256(data_to_hash.encode()).hexdigest()
+
+        # Atualizar a cópia mutável com o hash calculado
+        mutable_data['document_hash'] = hash_value
 
         # Criptografar os dados antes de criar a instância do modelo
         title_encrypted = self.encrypt_data(mutable_data.get('document_title', ''))
