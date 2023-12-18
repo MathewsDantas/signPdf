@@ -21,6 +21,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
 
+
     @action(detail=True, methods=['get'], url_path='generate-pdf')
     @swagger_auto_schema(
         responses={
@@ -50,8 +51,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
             p.save()
 
             # Adicionar mensagem de sucesso
-            success_message = {"message": "PDF gerado com sucesso."}
-            response_data["success_message"] = success_message
+            response_data["message"] = "PDF gerado com sucesso."
 
             return response_data
         except Document.DoesNotExist:
