@@ -6,7 +6,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import hashlib
 
 class ClientSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Client
         fields = ('client_id','username', 'email', 'password')
@@ -43,9 +42,10 @@ class DocumentSerializer(serializers.ModelSerializer):
         body_encrypted = encrypt_data(mutable_data.get('document_body', ''))
         signature_encrypted = encrypt_data(mutable_data.get('document_signature', ''))
         # Atualizar a cópia mutável com os dados criptografados
-        mutable_data['document_title'] = title_encrypted
-        mutable_data['document_body'] = body_encrypted
-        mutable_data['document_signature'] = signature_encrypted
+        mutable_data['document_title'] = title_encrypted.decode('utf-8')
+        mutable_data['document_body'] = body_encrypted.decode('utf-8')
+        mutable_data['document_signature'] = signature_encrypted.decode('utf-8')
+        print(mutable_data)
         
         return super().to_internal_value(mutable_data)
 
