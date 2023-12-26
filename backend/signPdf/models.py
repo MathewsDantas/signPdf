@@ -24,4 +24,4 @@ class Document(models.Model):
         verbose_name_plural = 'Documents'
 
     def __str__(self):
-        return self.document_name
+        return f'{self.document_id} - {self.document_title}'

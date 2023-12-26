@@ -1,3 +1,5 @@
+from io import BytesIO
+from signPdf.utils.pdf_sign import PDFSigner
 from signPdf.models import Client, Document
 from rest_framework import viewsets, status
 from .serializer import ClientSerializer, DocumentSerializer
@@ -36,10 +38,12 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
             # Criar um objeto HttpResponse com o cabeçalho de conteúdo apropriado para um PDF.
             response_data = HttpResponse(content_type='application/pdf')
-            response_data['Content-Disposition'] = f'attachment; filename={decrypt_data(document.document_title)}.pdf'
+            response_data['Content-Disposition'] = f'attachment; filename={decrypt_data(document.document_title)}.pdf' 
+
+            buffer = BytesIO()
 
             # Criar o objeto PDF usando o canvas do reportlab
-            p = canvas.Canvas(response_data)
+            p = canvas.Canvas(buffer)
             
             # Adicionar informações ao PDF
             p.drawString(100, 800, f'Título do Documento: {decrypt_data(document.document_title)}')
@@ -48,10 +52,13 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
             # Fechar o objeto PDF
             p.showPage()
-            p.save()
+            p.save() 
+            
+            pdf_bytes = buffer.getvalue() # Obtém o valor do buffer
+            signed_pdf = PDFSigner(document, pdf_bytes).sign() # Assina o PDF
 
-            # Adicionar mensagem de sucesso
             response_data["message"] = "PDF gerado com sucesso."
+            response_data.content = signed_pdf.getvalue()
 
             return response_data
         except Document.DoesNotExist:
