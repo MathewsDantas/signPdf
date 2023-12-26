@@ -1,4 +1,5 @@
 from io import BytesIO
+from signPdf.utils.generate_certificate import Certificate
 from signPdf.utils.pdf_sign import PDFSigner
 from signPdf.models import Client, Document
 from rest_framework import viewsets, status
@@ -22,7 +23,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-
 
     @action(detail=True, methods=['get'], url_path='generate-pdf')
     @swagger_auto_schema(
@@ -53,7 +53,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
             # Fechar o objeto PDF
             p.showPage()
             p.save() 
-            
+
+            Certificate(document).generate_certificate()
+
             pdf_bytes = buffer.getvalue() # Obtém o valor do buffer
             signed_pdf = PDFSigner(document, pdf_bytes).sign() # Assina o PDF
 

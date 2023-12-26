@@ -9,7 +9,7 @@ class Client(User):
         verbose_name_plural = 'Clients'
 
     def __str__(self):
-        return self.username
+        return f'{self.client_id} - {self.username} - {self.email}'
     
 class Document(models.Model):
     document_id = models.AutoField(primary_key=True)

@@ -1,4 +1,3 @@
-import uuid
 from io import BytesIO
 from pyhanko import stamp
 from pyhanko.pdf_utils.incremental_writer import IncrementalPdfFileWriter
@@ -18,7 +17,6 @@ class PDFSigner:
         signer = signers.SimpleSigner.load(
             self.key_pem_path, self.cert_pem_path, ca_chain_files=(), key_passphrase=None
         )
-        print('SIGNER: ',signer)
         # Cria um escritor incremental para o arquivo PDF a ser assinado
         w = IncrementalPdfFileWriter(BytesIO(self.pdf))
 
@@ -42,7 +40,7 @@ class PDFSigner:
 
         # # Realiza a assinatura do PDF
         pdf_signer.sign_pdf(
-            w, output=out, appearance_text_params={"url": f"http://localhost:8000/api/v1/pdf/get_by_hash/?hash={self.hash}"},
+            w, output=out, appearance_text_params={"url": f"http://127.0.0.1:8000/api/swagger/documento/check-document-by-hash/?document_hash={self.hash}"},
         )
 
         # Retorna o PDF assinado e o identificador único
