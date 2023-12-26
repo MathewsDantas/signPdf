@@ -65,15 +65,16 @@ class DocumentViewSet(viewsets.ModelViewSet):
             response_data = {"message": "Erro ao gerar o PDF, verifique o id do documento fornecido."}
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
     
-    @action(detail=False, methods=['post'], url_path='check-document-by-hash')
+    @action(detail=False, methods=['get'], url_path='check-document-by-hash')
     @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'document_hash': openapi.Schema(type=openapi.TYPE_STRING),
-            },
-            required=['hash'],
-        ),
+        manual_parameters=[
+            openapi.Parameter(
+                'document_hash', 
+                openapi.IN_QUERY, 
+                description="Hash do documento a ser verificado", 
+                type=openapi.TYPE_STRING
+            )
+        ],
         responses={
             200: openapi.Response(description="Documento encontrado"),
             404: openapi.Response(description="Nenhum documento encontrado com o hash fornecido."),
@@ -81,7 +82,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     )
     def check_document_by_hash(self, request):
         # Obter o valor do hash a partir do corpo da solicitação
-        hash_value = request.data.get('document_hash', '')
+        hash_value = request.query_params.get('document_hash', '')
 
         # Verificar se existe algum documento com o hash fornecido
         try:

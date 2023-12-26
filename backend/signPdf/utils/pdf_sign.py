@@ -3,13 +3,13 @@ from io import BytesIO
 from pyhanko import stamp
 from pyhanko.pdf_utils.incremental_writer import IncrementalPdfFileWriter
 from pyhanko.sign import fields, signers
-
-from signPdf.models import Document
+from signPdf.utils.cryptograpy import decrypt_data
 
 class PDFSigner:
     def __init__(self, document, pdf):
         self.pdf = pdf
         self.hash = document.document_hash
+        self.document_signature = document.document_signature
         self.key_pem_path = "./signPdf/utils/keys/private_key.pem"
         self.cert_pem_path = "./signPdf/utils/keys/cert_key.pem"
 
@@ -28,12 +28,14 @@ class PDFSigner:
         # Configura metadados para a assinatura
         meta = signers.PdfSignatureMetadata(field_name="Signature")
 
+
+
         # Configura o PDFSigner com o carimbo e outros detalhes da assinatura
         pdf_signer = signers.PdfSigner(
             meta,
             signer=signer,
             stamp_style=stamp.QRStampStyle(
-                stamp_text="Assinado por: %(signer)s\nData: %(ts)s\nURL: %(url)s",
+                stamp_text=f"Assinado por: {decrypt_data(self.document_signature)}\nData: %(ts)s\nURL: %(url)s",
             ),
         )
 
@@ -42,7 +44,7 @@ class PDFSigner:
 
         # # Realiza a assinatura do PDF
         pdf_signer.sign_pdf(
-            w, output=out, appearance_text_params={"url": f"http://localhost:8000/api/v1/pdf/get_by_hash/?hash={self.hash}"},
+            w, output=out, appearance_text_params={"url": f"http://127.0.0.1:8000/api/swagger/documento/check-document-by-hash/?document_hash={self.hash}"},
         )
 
         # Retorna o PDF assinado e o identificador único
