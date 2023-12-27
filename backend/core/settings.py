@@ -17,7 +17,7 @@ SECRET_KEY = "django-insecure-mc_%@t2-z=v6ea$!ku#t^g8y60pk)*9$ge2hlg9w*-tm83u)1v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://sign-pdf-c80q.onrender.com/', 'localhost', '']
+ALLOWED_HOSTS = ['sign-pdf-c80q.onrender.com', 'localhost', '']
 
 
 # Application definition
