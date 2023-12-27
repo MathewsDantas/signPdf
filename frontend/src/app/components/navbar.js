@@ -6,7 +6,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import ModalEditUser from "./modalEditUser";
 
 const navigation = [
-  { name: "Gerar PDF", href: "/dashboard", current: false },
+  { name: "Criar Documento", href: "/dashboard", current: false },
   { name: "Verificar PDF", href: "/verificaPdf", current: false },
 ];
 
