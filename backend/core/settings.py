@@ -1,7 +1,8 @@
 from datetime import timedelta
-import os
 from pathlib import Path
+import dj_database_url
 import environ
+import os
 
 env = environ.Env()
 environ.Env.read_env()
@@ -13,12 +14,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-mc_%@t2-z=v6ea$!ku#t^g8y60pk)*9$ge2hlg9w*-tm83u)1v"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', "False").lower() == 'true'
 
-ALLOWED_HOSTS = ['sign-pdf-c80q.onrender.com', '127.0.0.1', '']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', "localhost").split(',')
 
 # Application definition
 
@@ -74,11 +75,14 @@ WSGI_APPLICATION = "core.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR/'db.sqlite3',
     }
 }
+
+database_url = os.environ.get('DATABASE_URL', None)
+DATABASES['default'] = dj_database_url.parse(database_url)
 
 
 # Password validation
