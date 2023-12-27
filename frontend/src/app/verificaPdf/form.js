@@ -21,9 +21,9 @@ export default function Form() {
           </div>
         </div>
         
-        <h2 className="text-2xl font-bold leading-9 tracking-tight text-center mt-6 text-green-500 uppercase">O pdf verificado é válido</h2>
+        <h2 className="text-2xl font-bold leading-9 tracking-tight text-center mt-6 text-green-500 uppercase">O documento verificado é válido</h2>
         <p className="text-center mt-6 text-xl">
-          Baixe o PDF{" "}
+          Baixe o documento como PDF{" "}
           <span className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer">
             clicando aqui
           </span>

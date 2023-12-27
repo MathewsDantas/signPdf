@@ -7,7 +7,7 @@ import ModalEditUser from "./modalEditUser";
 
 const navigation = [
   { name: "Criar Documento", href: "/dashboard", current: false },
-  { name: "Verificar PDF", href: "/verificaPdf", current: false },
+  { name: "Verificar Documento", href: "/verificaPdf", current: false },
 ];
 
 function classNames(...classes) {
