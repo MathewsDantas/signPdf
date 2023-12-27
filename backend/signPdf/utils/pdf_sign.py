@@ -2,13 +2,14 @@ from io import BytesIO
 from pyhanko import stamp
 from pyhanko.pdf_utils.incremental_writer import IncrementalPdfFileWriter
 from pyhanko.sign import fields, signers
-
-from signPdf.models import Document
+from signPdf.utils.cryptograpy import decrypt_data
 
 class PDFSigner:
     def __init__(self, document, pdf):
         self.pdf = pdf
         self.hash = document.document_hash
+        self.document_signature = document.document_signature
+        self.date = document.signature_date
         self.key_pem_path = "./signPdf/utils/keys/private_key.pem"
         self.cert_pem_path = "./signPdf/utils/keys/cert_key.pem"
 
@@ -31,7 +32,7 @@ class PDFSigner:
             meta,
             signer=signer,
             stamp_style=stamp.QRStampStyle(
-                stamp_text="Assinado por: %(signer)s\nData: %(ts)s\nURL: %(url)s",
+                stamp_text=f"Assinado por: {decrypt_data(self.document_signature)}\nData: {self.date}\nURL: %(url)s",
             ),
         )
 

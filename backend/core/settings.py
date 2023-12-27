@@ -25,7 +25,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "signPdf",
     'rest_framework_simplejwt',
-    
+    'corsheaders',
     'rest_framework',
     "django.contrib.admin",
     "django.contrib.auth",
@@ -44,6 +44,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -133,6 +134,7 @@ SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {"api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}},
 }
 
+CORS_ALLOW_ALL_ORIGINS = True  # Permitir todas as origens. 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

@@ -13,14 +13,20 @@ from reportlab.pdfgen import canvas
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
+
 
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
 class DocumentViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = {
+    #     "default": [permissions.IsAuthenticated],
+    #     "generatePdf": [permissions.IsAuthenticated],
+    #     "check_document_by_hash": [permissions.AllowAny],
+    # }
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
 
@@ -48,7 +54,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
             # Adicionar informações ao PDF
             p.drawString(100, 800, f'Título do Documento: {decrypt_data(document.document_title)}')
             p.drawString(100, 780, f'Corpo do Documento: {decrypt_data(document.document_body)}')
-            p.drawString(100, 760, f'Assinatura do Documento: {decrypt_data(document.document_signature)}')
 
             # Fechar o objeto PDF
             p.showPage()
@@ -67,15 +72,16 @@ class DocumentViewSet(viewsets.ModelViewSet):
             response_data = {"message": "Erro ao gerar o PDF, verifique o id do documento fornecido."}
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
     
-    @action(detail=False, methods=['post'], url_path='check-document-by-hash')
+    @action(detail=False, methods=['get'], url_path='check-document-by-hash')
     @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'document_hash': openapi.Schema(type=openapi.TYPE_STRING),
-            },
-            required=['hash'],
-        ),
+        manual_parameters=[
+            openapi.Parameter(
+                'document_hash', 
+                openapi.IN_QUERY, 
+                description="Hash do documento a ser verificado", 
+                type=openapi.TYPE_STRING
+            )
+        ],
         responses={
             200: openapi.Response(description="Documento encontrado"),
             404: openapi.Response(description="Nenhum documento encontrado com o hash fornecido."),
@@ -83,7 +89,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     )
     def check_document_by_hash(self, request):
         # Obter o valor do hash a partir do corpo da solicitação
-        hash_value = request.data.get('document_hash', '')
+        hash_value = request.query_params.get('document_hash', '')
 
         # Verificar se existe algum documento com o hash fornecido
         try:

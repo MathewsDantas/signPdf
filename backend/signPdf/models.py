@@ -18,6 +18,7 @@ class Document(models.Model):
     document_body = models.CharField(max_length=500)
     document_signature = models.CharField(max_length=200)
     document_hash = models.CharField(max_length=500, blank=True, null=True)
+    signature_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Document'
