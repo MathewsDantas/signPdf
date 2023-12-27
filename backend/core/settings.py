@@ -18,8 +18,7 @@ SECRET_KEY = "django-insecure-mc_%@t2-z=v6ea$!ku#t^g8y60pk)*9$ge2hlg9w*-tm83u)1v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['sign-pdf-c80q.onrender.com', 'localhost', '']
-
+ALLOWED_HOSTS = ['sign-pdf-c80q.onrender.com', '127.0.0.1', '']
 
 # Application definition
 
@@ -152,10 +151,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
