@@ -41,7 +41,7 @@ class PDFSigner:
 
         # # Realiza a assinatura do PDF
         pdf_signer.sign_pdf(
-            w, output=out, appearance_text_params={"url": f"http://127.0.0.1:8000/api/swagger/documento/check-document-by-hash/?document_hash={self.hash}"},
+            w, output=out, appearance_text_params={"url": f"https://sign-pdf-uvl5.onrender.com/api/swagger/documento/check-document-by-hash/?document_hash={self.hash}"},
         )
 
         # Retorna o PDF assinado e o identificador único
