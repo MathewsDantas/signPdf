@@ -8,7 +8,7 @@ import hashlib
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ('client_id','username', 'email', 'password')
+        fields = ('id','username', 'email', 'password')
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -66,11 +66,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        print(user)
 
-        token["client_id"] = user.client.pk
-        token["nome"] = user.client.username
-        token["cpf"] = user.client.email
+        token["nome"] = user.username
+        token["email"] = user.email
 
         return token
 

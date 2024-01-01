@@ -24,6 +24,10 @@ ALLOWED_HOSTS = ['sign-pdf-c80q.onrender.com', '127.0.0.1', '']
 
 INSTALLED_APPS = [
     "signPdf",
+
+    "import_export",
+    "simple_history",
+    "safedelete",
     'rest_framework_simplejwt',
     'corsheaders',
     'rest_framework',
@@ -104,7 +108,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
+AUTH_USER_MODEL = 'signPdf.Client'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
