@@ -12,6 +12,7 @@ class ClientAdmin(BaseModelAdmin):
     list_display = ('username', 'email', 'password', 'is_active', 'is_staff', 'get_published_date')
     search_fields = ('username', 'email')
     list_filter = ["is_active",] + BaseModelAdmin.list_filter
+    list_editable = ["is_active",]
     readonly_fields = ["password",]
     date_hierarchy = "date_joined"
     fieldsets = [
