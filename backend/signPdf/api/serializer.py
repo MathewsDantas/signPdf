@@ -8,7 +8,7 @@ import hashlib
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ('client_id','username', 'email', 'password')
+        fields = ('id','username', 'email', 'password')
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -23,11 +23,14 @@ class ClientSerializer(serializers.ModelSerializer):
         return client
 
 class DocumentSerializer(serializers.ModelSerializer):
+    client = serializers.CharField(read_only=True)
+    document_hash = serializers.CharField(read_only=True)
+
     class Meta:
         model = Document
         fields = ('document_id', 'client', 'document_title', 'document_body', 'document_signature', 'document_hash')
     
-    def to_internal_value(self, data):
+    def create(self, data):
         # Criar uma cópia mutável dos dados
         mutable_data = data.copy()
         # Calcula o hash antes da criptografia
@@ -45,9 +48,10 @@ class DocumentSerializer(serializers.ModelSerializer):
         mutable_data['document_title'] = title_encrypted.decode('utf-8')
         mutable_data['document_body'] = body_encrypted.decode('utf-8')
         mutable_data['document_signature'] = signature_encrypted.decode('utf-8')
-        print(mutable_data)
-        
-        return super().to_internal_value(mutable_data)
+        client = self.context['request'].user
+        mutable_data['client'] = client
+
+        return super().create(mutable_data)
 
     def to_representation(self, instance):
         # Descriptografa os dados antes de serializar
@@ -66,11 +70,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        print(user)
 
-        token["client_id"] = user.client.pk
-        token["nome"] = user.client.username
-        token["cpf"] = user.client.email
+        token["nome"] = user.username
+        token["email"] = user.email
 
         return token
 

@@ -1,4 +1,5 @@
 from datetime import timedelta
+import os
 from pathlib import Path
 import environ
 
@@ -17,15 +18,18 @@ SECRET_KEY = "django-insecure-mc_%@t2-z=v6ea$!ku#t^g8y60pk)*9$ge2hlg9w*-tm83u)1v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['sign-pdf-c80q.onrender.com', '127.0.0.1', '']
 
 # Application definition
 
 INSTALLED_APPS = [
     "signPdf",
+
+    "import_export",
+    "simple_history",
+    "safedelete",
     'rest_framework_simplejwt',
-    
+    'corsheaders',
     'rest_framework',
     "django.contrib.admin",
     "django.contrib.auth",
@@ -38,12 +42,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -102,7 +108,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
+AUTH_USER_MODEL = 'signPdf.Client'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -133,6 +139,7 @@ SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {"api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}},
 }
 
+CORS_ALLOW_ALL_ORIGINS = True  # Permitir todas as origens. 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -149,7 +156,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = 'static/'
+STATIC_ROOT = 'staticfiles'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

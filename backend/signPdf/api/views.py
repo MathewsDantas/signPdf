@@ -1,4 +1,5 @@
 from io import BytesIO
+from signPdf.utils.generate_certificate import Certificate
 from signPdf.utils.pdf_sign import PDFSigner
 from signPdf.models import Client, Document
 from rest_framework import viewsets, status
@@ -12,17 +13,68 @@ from reportlab.pdfgen import canvas
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
+from rest_framework import filters, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.renderers import JSONRenderer
+
+
+class CustomRenderer(JSONRenderer):
+    def render(self, data, accepted_media_type=None, renderer_context=None):
+        if isinstance(data, dict) and data.get("success", None) is False:
+            return super(CustomRenderer, self).render(data, accepted_media_type, renderer_context)
+
+        response = {"data": data, "metadata": {}, "success": True, "errors": []}
+
+        if data and "metadata" in data:
+            response["metadata"] = data.pop("metadata")
+
+        # Handling pagination
+        if data and hasattr(data, "keys") and "results" in data.keys():
+            response["data"] = data["results"]
+            for key in data.keys():
+                if key != "results":
+                    response["metadata"][key] = data[key]
+
+        return super(CustomRenderer, self).render(response, accepted_media_type, renderer_context)
+
+
+class PermissionsMixin:
+    """
+    A mixin that permits to define a permission class for each action.
+    """
+    permission_classes = None
+
+    def get_permissions(self):
+        permission_classes = self.permission_classes
+        if isinstance(permission_classes, dict):
+            if self.action in permission_classes:
+                return [permission() for permission in permission_classes[self.action]]
+            return [permission() for permission in permission_classes["default"]]
+        return [permission() for permission in permission_classes]
+    
+
+class CustomModelViewSet(PermissionsMixin, viewsets.ModelViewSet):
+    """
+    A viewset that provides default `create()`, `retrieve()`, `update()`, `partial_update()`, `destroy()` and `list()` actions.
+    """
+
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    renderer_classes = [CustomRenderer]
+
 
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
-class DocumentViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+class DocumentViewSet(CustomModelViewSet):
+    permission_classes = {
+        "default": [permissions.IsAuthenticated],
+        "generatePdf": [permissions.IsAuthenticated],
+        "check_document_by_hash": [permissions.AllowAny],
+    }
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-
 
     @action(detail=True, methods=['get'], url_path='generate-pdf')
     @swagger_auto_schema(
@@ -48,12 +100,13 @@ class DocumentViewSet(viewsets.ModelViewSet):
             # Adicionar informações ao PDF
             p.drawString(100, 800, f'Título do Documento: {decrypt_data(document.document_title)}')
             p.drawString(100, 780, f'Corpo do Documento: {decrypt_data(document.document_body)}')
-            p.drawString(100, 760, f'Assinatura do Documento: {decrypt_data(document.document_signature)}')
 
             # Fechar o objeto PDF
             p.showPage()
             p.save() 
-            
+
+            Certificate(document).generate_certificate()
+
             pdf_bytes = buffer.getvalue() # Obtém o valor do buffer
             signed_pdf = PDFSigner(document, pdf_bytes).sign() # Assina o PDF
 

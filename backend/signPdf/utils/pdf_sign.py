@@ -1,4 +1,3 @@
-import uuid
 from io import BytesIO
 from pyhanko import stamp
 from pyhanko.pdf_utils.incremental_writer import IncrementalPdfFileWriter
@@ -10,6 +9,7 @@ class PDFSigner:
         self.pdf = pdf
         self.hash = document.document_hash
         self.document_signature = document.document_signature
+        self.date = document.signature_date
         self.key_pem_path = "./signPdf/utils/keys/private_key.pem"
         self.cert_pem_path = "./signPdf/utils/keys/cert_key.pem"
 
@@ -18,7 +18,6 @@ class PDFSigner:
         signer = signers.SimpleSigner.load(
             self.key_pem_path, self.cert_pem_path, ca_chain_files=(), key_passphrase=None
         )
-        print('SIGNER: ',signer)
         # Cria um escritor incremental para o arquivo PDF a ser assinado
         w = IncrementalPdfFileWriter(BytesIO(self.pdf))
 
@@ -35,7 +34,7 @@ class PDFSigner:
             meta,
             signer=signer,
             stamp_style=stamp.QRStampStyle(
-                stamp_text=f"Assinado por: {decrypt_data(self.document_signature)}\nData: %(ts)s\nURL: %(url)s",
+                stamp_text=f"Assinado por: {decrypt_data(self.document_signature)}\nData: {self.date}\nURL: %(url)s",
             ),
         )
 
