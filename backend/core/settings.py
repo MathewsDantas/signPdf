@@ -23,11 +23,10 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', "localhost").split(',')
 
 INSTALLED_APPS = [
     "signPdf",
-    
-    'safedelete',
-    'simple_history',
-    'django_filters',
-    'django_extensions',
+
+    "import_export",
+    "simple_history",
+    "safedelete",
     'rest_framework_simplejwt',
     'corsheaders',
     'rest_framework',
@@ -111,7 +110,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
+AUTH_USER_MODEL = 'signPdf.Client'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
