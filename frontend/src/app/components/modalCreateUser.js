@@ -1,8 +1,8 @@
-import { Fragment, useRef } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useRef } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
 
 export default function ModalCreateUser({ open, setOpen }) {
-  const cancelButtonRef = useRef(null);
+  const cancelButtonRef = useRef(null)
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -121,5 +121,5 @@ export default function ModalCreateUser({ open, setOpen }) {
         </div>
       </Dialog>
     </Transition.Root>
-  );
+  )
 }
