@@ -1,8 +1,8 @@
-import Form from "./form";
+import Form from './form'
 export default function Home() {
   return (
     <>
       <Form />
     </>
-  );
+  )
 }
