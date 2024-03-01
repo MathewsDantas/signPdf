@@ -28,7 +28,7 @@ urlpatterns = [
     path("api/login/refresh", TokenRefreshView.as_view()),
 ]
 
-#swagger
+#SWAGGER
 urlpatterns += [
     path(
         "api/swagger<format>/",
