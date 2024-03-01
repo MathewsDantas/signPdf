@@ -2,11 +2,11 @@ name: Django CI
 
 on:
   push:
-    branches: [ 8-criar-arquivo-workflow-para-django ]
+    branches: [ dev ]
     paths:
     - 'backend/**'
   pull_request:
-    branches: [ 8-criar-arquivo-workflow-para-django ]
+    branches: [ dev ]
     paths:
     - 'backend/**'
 
