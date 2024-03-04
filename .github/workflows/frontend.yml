@@ -1,0 +1,45 @@
+name: Next.js Build and Test
+
+on:
+  push:
+    branches: [ "10-criar-o-pipeline-de-ci-para-o-front" ]
+    paths:
+      - 'frontend/**'
+  pull_request:
+    branches: [ "10-criar-o-pipeline-de-ci-para-o-front" ]
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Install NextJS
+        run: npm install -g next
+        
+      - name: Install Dependencies
+        run: | 
+          cd frontend
+          npm install
+
+      - name: Build
+        run: | 
+          cd frontend
+          npm run build
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."

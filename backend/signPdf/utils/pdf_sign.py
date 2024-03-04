@@ -33,6 +33,8 @@ class PDFSigner:
         # Configura metadados para a assinatura
         meta = signers.PdfSignatureMetadata(field_name="Signature")
 
+
+
         # Configura o PDFSigner com o carimbo e outros detalhes da assinatura
         pdf_signer = signers.PdfSigner(
             meta,
