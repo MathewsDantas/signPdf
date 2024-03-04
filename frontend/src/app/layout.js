@@ -1,10 +1,10 @@
-import Navbar from "./components/navbar";
-import "./globals.css";
+import Navbar from './components/navbar'
+import './globals.css'
 
 export const metadata = {
-  title: "ASSINAR PDF",
-  description: "Web app para assinar PDFs com certificado digital",
-};
+  title: 'ASSINAR PDF',
+  description: 'Web app para assinar PDFs com certificado digital',
+}
 
 export default function RootLayout({ children }) {
   return (
@@ -14,5 +14,5 @@ export default function RootLayout({ children }) {
         {children}
       </body>
     </html>
-  );
+  )
 }

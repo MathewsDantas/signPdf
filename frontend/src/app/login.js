@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import ModalCreateUser from "./components/modalCreateUser";
+import { useState } from 'react'
+import ModalCreateUser from './components/modalCreateUser'
 
 export default function Login() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <>
@@ -80,7 +80,7 @@ export default function Login() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Não tem conta ?{" "}
+            Não tem conta ?{' '}
             <span
               onClick={() => setOpen(true)}
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
@@ -91,5 +91,5 @@ export default function Login() {
         </div>
       </div>
     </>
-  );
+  )
 }
