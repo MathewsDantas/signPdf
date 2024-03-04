@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [18.x]
 
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -28,11 +28,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          
+      - name: Install NextJS
+        run: npm install -g next
 
       - name: Install dependencies
-        run: npm build
+        run: npm run build
 
-      - name: Build
-        run: |
-          npm run start
-          npx webpack
