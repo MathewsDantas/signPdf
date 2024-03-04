@@ -2,11 +2,11 @@ name: Next.js Build and Test
 
 on:
   push:
-    branches: [ "10-criar-o-pipeline-de-ci-para-o-front" ]
+    branches: [ "dev" ]
     paths:
       - 'frontend/**'
   pull_request:
-    branches: [ "10-criar-o-pipeline-de-ci-para-o-front" ]
+    branches: [ "dev" ]
     paths:
       - 'frontend/**'
 
