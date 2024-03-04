@@ -33,5 +33,8 @@ jobs:
         run: npm install -g next
 
       - name: Install dependencies
-        run: npm run build
+        run: | 
+          cd frontend
+          npm run build
 
+      - run: echo "🍏 This job's status is ${{ job.status }}."
