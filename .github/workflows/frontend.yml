@@ -31,8 +31,13 @@ jobs:
           
       - name: Install NextJS
         run: npm install -g next
+        
+      - name: Install Dependencies
+        run: | 
+          cd frontend
+          npm install
 
-      - name: Install dependencies
+      - name: Build
         run: | 
           cd frontend
           npm run build
