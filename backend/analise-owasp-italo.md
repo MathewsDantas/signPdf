@@ -30,8 +30,8 @@ A falha está na falta de vinculação do certificado ao usuário e na geração
 
 O problema descrito fere principalmente as seguintes boas práticas do OWASP Top Ten:
 
-- **A01:2021 - Broken Access Control:** Relacionado à gestão inadequada dos certificados e à falta de controle sobre quem está assinando os documentos.
+**A01:2021 - Broken Access Control:** Embora o problema não envolva diretamente o acesso não autorizado aos recursos, ele está relacionado à gestão inadequada dos certificados e à falta de controle sobre quem está assinando os documentos. A ausência de vinculação entre os certificados e os usuários pode permitir a manipulação inadequada dos certificados, comprometendo indiretamente o controle de acesso e a integridade dos documentos.  
 
-- **A05:2021 - Security Misconfiguration:** A prática de gerar novos certificados a cada assinatura pode ser considerada uma configuração inadequada do sistema.
+**A05:2021 - Security Misconfiguration:** A prática de gerar novos certificados a cada assinatura de documento pode ser considerada uma configuração inadequada do sistema. Isso pode levar a vulnerabilidades, como falta de rastreabilidade e inconsistência nas assinaturas, o que pode facilitar ataques ou erros de segurança. 
 
 Código referência: [CÓDIGO DA VIEW](https://imgur.com/a/qTswT4X)
