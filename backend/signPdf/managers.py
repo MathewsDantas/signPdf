@@ -13,4 +13,3 @@ class UsuarioManager(SafeDeleteManager, UserManager):
         user = self.get_by_natural_key(email) if email else None
         if user and user.check_password(password):
             return user
-        return
