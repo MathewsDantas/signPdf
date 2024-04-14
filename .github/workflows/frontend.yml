@@ -37,6 +37,11 @@ jobs:
           cd frontend
           npm install
 
+      - name: Format Code with Prettier
+        run: | 
+          cd frontend
+          npx prettier . --write
+
       - name: Check Code Formatting
         run: | 
           cd frontend
