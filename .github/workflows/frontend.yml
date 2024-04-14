@@ -45,6 +45,7 @@ jobs:
       - name: Check Code Formatting
         run: | 
           cd frontend
+          cd src
           npx prettier . --check
 
       - name: Build
