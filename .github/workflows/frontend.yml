@@ -40,6 +40,7 @@ jobs:
       - name: Format Code with Prettier
         run: | 
           cd frontend
+          cd src
           npx prettier . --write
 
       - name: Check Code Formatting
