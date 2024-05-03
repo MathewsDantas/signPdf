@@ -19,7 +19,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.renderers import JSONRenderer
 
 
-#Test bandit 
+#Test bandit1 
 class CustomRenderer(JSONRenderer):
     def render(self, data, accepted_media_type=None, renderer_context=None):
         if isinstance(data, dict) and data.get("success", None) is False:
