@@ -35,6 +35,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r backend/requirements.txt
 
+    - name: Bandit Scan
+      run: |
+        bandit -r .
+
     - name: Make migrations
       run: | 
         cd backend
