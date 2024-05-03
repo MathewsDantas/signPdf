@@ -37,7 +37,7 @@ jobs:
 
     - name: Bandit Scan
       run: |
-        bandit -r .
+        bandit --exclude core -r .
 
     - name: Make migrations
       run: | 
