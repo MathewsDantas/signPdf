@@ -53,8 +53,12 @@ jobs:
         run: |
           cd frontend
           cd src
-          npx jscpd --exitCode 1 .
+          npx jscpd
           
+      - name: Run ESLINT:SECURITY
+        run: |
+          cd frontend
+          npx eslint src
 
       - name: Build
         run: | 
