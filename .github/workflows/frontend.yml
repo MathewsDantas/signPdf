@@ -49,6 +49,12 @@ jobs:
           cd src
           npx prettier . --check
 
+      - name: Run JSCPD
+        run: |
+          cd frontend
+          npx jscpd src
+          
+
       - name: Build
         run: | 
           cd frontend
