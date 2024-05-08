@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "jscpd": "^3.5.10"
+  }
+}
